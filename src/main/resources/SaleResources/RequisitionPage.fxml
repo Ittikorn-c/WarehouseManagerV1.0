@@ -48,7 +48,7 @@
             <Label layoutX="244.0" layoutY="108.0" text="Brand" />
             <Label layoutX="32.0" layoutY="154.0" text="name" />
             <Button layoutX="844.0" layoutY="99.0" mnemonicParsing="false" onAction="#addNewGoods" prefHeight="36.0" prefWidth="103.0" text="New Goods" />
-            <Button layoutX="450.0" layoutY="549.0" mnemonicParsing="false" text="Save" />
+            <Button layoutX="450.0" layoutY="549.0" mnemonicParsing="false" onAction="#saveOrder" text="Save" />
             <Label layoutX="505.0" layoutY="45.0" prefHeight="17.0" prefWidth="30.0" text="ใบเบิก" />
          </children>
       </Pane>

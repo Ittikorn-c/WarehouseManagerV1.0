@@ -65,7 +65,7 @@ public class DBConnector {
         try {
             connect();
             String query = "INSERT INTO goodses(id,type,brand,name,quantity,available) VALUES (NULL," + goods.getType() + "," + goods.getBrand() + "," + goods.getName() + "," + "0,0" + ")";
-            query = String.format("INSERT INTO `goodses` (`id`, `type`, `brand`, `name`, `quantity`, `available`) VALUES (NULL,'%s', '%s', '%s', '0', '0')",goods.getType(),goods.getBrand(),goods.getName());
+            query = String.format("INSERT INTO `goodses` (`id`, `type`, `brand`, `name`, `quantity`, `available`) VALUES (NULL,'%s', '%s', '%s', 0, 0)",goods.getType(),goods.getBrand(),goods.getName());
             System.out.println(query);
             Statement statement = conn.createStatement();
             statement.executeUpdate(query);
@@ -80,7 +80,20 @@ public class DBConnector {
     public  void insertRequisition(Requisition requisition){
         try {
             connect();
-            String query1 = String.format("INSERT INTO `requisition`");
+            String query = String.format("INSERT INTO `requisitions` (`req_id`, `status`) VALUES (NULL,'%s')",requisition.getStatus());
+            Statement statement = conn.createStatement();
+            statement.executeUpdate(query);
+
+            query = String.format("SELECT MAX(`req_id`) FROM `requisitions`");
+            ResultSet resultSet = statement.executeQuery(query);
+            resultSet.next();
+            int req_id = resultSet.getInt(1);
+
+            for (Goods g : requisition.getListGoods()) {
+                query = String.format("INSERT INTO `requisitiongoods` (`req_id`, `good_id`, `quantity`) VALUES (%d, %d, %d)",req_id,g.getId(),g.getAmount());
+                statement.executeUpdate(query);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
