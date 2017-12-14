@@ -1,16 +1,14 @@
-package controllers.SaleControllers;
+package SaleControllers.controller;
 
-import controllers.ComboBoxAutoComplete;
-import controllers.DataManager;
-import controllers.SaleControllers.AddAmountOrderController;
-import controllers.SaleControllers.AddNewGoodsController;
-import dataSources.DBConnector;
+import common.controllers.ComboBoxAutoComplete;
+import common.controllers.DataManager;
+import common.model.Requisition;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import models.Goods;
+import common.model.Goods;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -64,23 +62,27 @@ public class RequisitionController {
 
     public ObservableList<Goods> observableListOrder;
 
-    DBConnector dbConnector = new DBConnector();
-    ArrayList<Goods> goodses = new ArrayList<Goods>();
 
     public void setDataManager(DataManager dataManager) {
         this.dataManager = dataManager;
+        for(Goods g : dataManager.getGoodses()){
+            listGoods.add(g);
+        }
+        observableListGoods = FXCollections.observableArrayList(listGoods);
+        tableViewGoods.setItems(observableListGoods);
     }
 
     private DataManager dataManager;
 
     @FXML
     public void initialize(){
-        goodses = dbConnector.getAllGoodses();
-        for(Goods g : goodses){
-            listGoods.add(g);
+
+        typeComboBox.getItems().addAll("A", "ab", "bb", "ca", "dd","aaa");
+        String[] s = {"D","E"};
+        for (String ss : s){
+            typeComboBox.getItems().add(ss);
         }
 
-        typeComboBox.getItems().addAll("A", "ab", "bb", "ca", "dd");
 
         new ComboBoxAutoComplete<String>(typeComboBox);
 
@@ -105,9 +107,8 @@ public class RequisitionController {
 
     @FXML
     public void reGoodsTable(){
-        goodses = dbConnector.getAllGoodses();
         listGoods = new ArrayList();
-        for(Goods g : goodses){
+        for(Goods g : dataManager.getGoodses()){
             listGoods.add(g);
         }
 
@@ -177,5 +178,10 @@ public class RequisitionController {
 
         observableListOrder = FXCollections.observableArrayList(listOrder);
         tableViewOrder.setItems(observableListOrder);
+    }
+
+    public void saveOrder(){
+        Requisition requisition = new Requisition((ArrayList<Goods>) listOrder);
+        this.dataManager.insertRequisition(requisition);
     }
 }

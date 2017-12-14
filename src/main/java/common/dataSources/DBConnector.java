@@ -1,6 +1,7 @@
-package dataSources;
+package common.dataSources;
 
-import models.Goods;
+import common.model.Goods;
+import common.model.Requisition;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -69,6 +70,17 @@ public class DBConnector {
             Statement statement = conn.createStatement();
             statement.executeUpdate(query);
             conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public  void insertRequisition(Requisition requisition){
+        try {
+            connect();
+            String query1 = String.format("INSERT INTO `requisition`");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
